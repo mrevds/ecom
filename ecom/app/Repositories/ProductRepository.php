@@ -27,7 +27,7 @@ class ProductRepository {
             $query->where('status', $filters['status']);
         }
 
-        return $query->paginate(20);
+        return $query->paginate(10);
     }
     public function update(int $id, array $data): bool
     {
