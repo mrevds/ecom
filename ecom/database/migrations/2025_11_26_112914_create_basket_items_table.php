@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bascet-items', function (Blueprint $table) {
+        Schema::create('basket_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('basket_id')->constrained('bascets');
+            $table->foreignId('basket_id')->constrained('baskets');
             $table->foreignId('product_id')->constrained('products');
             $table->integer('quantity')->default(1);
-            $table->integer('price'); // фиксируем цену
+            $table->decimal('price', 10, 2);
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bascet-items');
+        Schema::dropIfExists('basket_items');
     }
 };

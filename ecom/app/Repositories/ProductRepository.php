@@ -39,4 +39,9 @@ class ProductRepository {
         $product = $this->findById($id);
         return $product ? $product->delete(): false;
     }
+    public function getProductPrice(int $productId): float
+    {
+        $productPrice = $this->findById($productId);
+        return $productPrice ? $productPrice->price : 0;
+    }
 }

@@ -6,24 +6,28 @@ use App\Models\Basket;
 use App\Models\Products;
 use App\Repositories\BasketRepository;
 use App\Models\BasketItem;
+use App\Repositories\ProductRepository;
 
 class BasketService {
     public function __construct(
-        private BasketRepository $bascetRepository
+        private BasketRepository $bascetRepository,
+        private ProductRepository $productRepository
     ){}
     public function addToBascet(int $userId, array $data): BasketItem
     {
         $basket = Basket::firstOrCreate(['user_id' => $userId]);
 
+        $productPrice = $this->productRepository->getProductPrice($data['product_id']);
+
         if ($data['quantity'] > $this->bascetRepository->getProductsQuanity($data['product_id'])) {
-            return 'not enough';
+            throw new \Exception('Not enough stock available');
         }
 
         $data = [
             'basket_id' => $basket->id,
             'product_id' => $data['product_id'],
             'quantity' => $data['quantity'],
-            'price' => $data['price'],
+            'price' => $productPrice,
         ];
 
         return $this->bascetRepository->addItemToBascet($data);
