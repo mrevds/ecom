@@ -4,10 +4,12 @@ namespace App\Services;
 
 use App\Models\Card;
 use App\Repositories\CardRepository;
+use App\Repositories\OrderRepository;
 
 class CardService {
     public function __construct(
-        private CardRepository $cardRepository
+        private CardRepository $cardRepository,
+        private OrderRepository $orderRepository
     ){}
     private function validateExpiry(string $date): bool
     {
@@ -62,12 +64,24 @@ class CardService {
     public function deleteCard(int $cardId){
         return $this->cardRepository->deleteCard($cardId);
     }
-    public function pay(float $price, int $cardID)
+    public function pay(float $price, int $cardID, int $userId)
     {
         $getBalance = $this->cardRepository->getBalance($cardID);
+        $getAddress = $this->orderRepository->getOrderAddress($userId);
+        if (empty($getAddress)) {
+            return [
+                "successs" => false,
+                "message" => "Address not found, please set Address"
+            ];
+        }
         if ($getBalance < $price) {
             throw new \Exception('not enought money)');
         }
         return $this->cardRepository->payOrder($price,$cardID);
+    }
+
+    public function getUserCards(int $userId)
+    {
+        return $this->cardRepository->getUserCards($userId);
     }
 }

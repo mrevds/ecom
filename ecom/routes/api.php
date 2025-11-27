@@ -14,6 +14,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     Route::post('/add-card', [CardController::class, 'addCard']);
+    Route::get('/cards', [CardController::class, 'getUserCards']);
     Route::post('/add-item-to-basket',[BasketController::class, 'addItem']);
     Route::get('/get-basket-list',[BasketController::class, 'getBasketList']);
     Route::delete('/delete-item-from-basket/{id}', [BasketController::class, 'removeFromList']);

@@ -26,7 +26,13 @@ class CardController extends Controller
     {
         $price = $request->input('price');
         $cardID = $request->input('cardID');
-        $pay = $this->cardService->pay($price,$cardID);
+        $pay = $this->cardService->pay($price,$cardID,$request->user()->id);
         return response()->json($pay);
+    }
+
+    public function getUserCards(Request $request)
+    {
+        $cards = $this->cardService->getUserCards($request->user()->id);
+        return response()->json($cards);
     }
 }

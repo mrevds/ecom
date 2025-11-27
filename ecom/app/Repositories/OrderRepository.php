@@ -38,4 +38,10 @@ class OrderRepository {
         $order->save();
         return $order;
     }
+    public function getOrderAddress(int $userId): ?string
+    {
+        $order = Order::where('user_id', $userId)->first();
+        return $order?->address;
+    }
+
 }
