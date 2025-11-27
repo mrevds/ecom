@@ -14,7 +14,7 @@ class CardRepository {
         return $card ? $card->delete(): false;
     }
 
-    public function payBucket(int $totalPrice, int $cardId): array {
+    public function payOrder(float $totalPrice, int $cardId): array {
         $card = Card::find($cardId);
 
         if (!$card) {
@@ -39,5 +39,10 @@ class CardRepository {
             "message" => "Payment successful",
             "new_balance" => $card->balance
         ];
+    }
+    public function getBalance(int $cardID)
+    {
+        $card = Card::find($cardID);
+        return $card->balance;
     }
 }

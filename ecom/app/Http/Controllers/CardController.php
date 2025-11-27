@@ -22,4 +22,11 @@ class CardController extends Controller
         ]);
         return response()->json($card);
     }
+    public function pay(Request $request)
+    {
+        $price = $request->input('price');
+        $cardID = $request->input('cardID');
+        $pay = $this->cardService->pay($price,$cardID);
+        return response()->json($pay);
+    }
 }

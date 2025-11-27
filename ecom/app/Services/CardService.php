@@ -62,4 +62,12 @@ class CardService {
     public function deleteCard(int $cardId){
         return $this->cardRepository->deleteCard($cardId);
     }
+    public function pay(float $price, int $cardID)
+    {
+        $getBalance = $this->cardRepository->getBalance($cardID);
+        if ($getBalance < $price) {
+            throw new \Exception('not enought money)');
+        }
+        return $this->cardRepository->payOrder($price,$cardID);
+    }
 }

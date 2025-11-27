@@ -21,4 +21,15 @@ class BasketController extends Controller {
         );
         return response()->json($item);
     }
+    public function removeFromList(int $basketItemID)
+    {
+        $item = $this->bascetService->removeBasketItem($basketItemID);
+        return response()->json("removed from basketITEMS");
+    }
+    public function getBasketList(Request $request)
+    {
+        $userId = $request->user()->id;
+        $list = $this->bascetService->getBasketList($userId);
+        return response()->json($list);
+    }
 }

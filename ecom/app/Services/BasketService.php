@@ -32,4 +32,13 @@ class BasketService {
 
         return $this->bascetRepository->addItemToBascet($data);
     }
+    public function removeBasketItem(int $basketItemID)
+    {
+        return $this->bascetRepository->remove($basketItemID);
+    }
+    public function getBasketList(int $userID)
+    {
+        $basketID = $this->bascetRepository->getBasketID($userID);
+        return $this->bascetRepository->getList($basketID);
+    }
 }

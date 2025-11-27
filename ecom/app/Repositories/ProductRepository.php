@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 use App\Models\Products;
-use Illuminate\Support\Str;
+
 
 class ProductRepository {
     public function create(array $data): Products
@@ -43,5 +43,10 @@ class ProductRepository {
     {
         $productPrice = $this->findById($productId);
         return $productPrice ? $productPrice->price : 0;
+    }
+    public function getProductStock($productId)
+    {
+        $product = $this->findById($productId);
+        return $product ? $product->stock : 0;
     }
 }
