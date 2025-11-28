@@ -2,6 +2,9 @@
 
 namespace App\Repositories;
 use App\Models\Products;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
+
 
 
 class ProductRepository {
@@ -11,7 +14,9 @@ class ProductRepository {
     }
     public function findById(int $id): ?Products
     {
-        return Products::find($id);
+        return Cache::remember("product:{$id}", 3600, function () use ($id) {
+            return Products::find($id);
+        });
     }
     public function getAll(array $filters = [])
     {
@@ -29,11 +34,13 @@ class ProductRepository {
 
         return $query->paginate(10);
     }
+
     public function update(int $id, array $data): bool
     {
         $product = $this->findById($id);
         return $product ? $product->update($data) : false;
     }
+
     public function delete(int $id): bool
     {
         $product = $this->findById($id);
