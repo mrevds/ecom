@@ -38,10 +38,31 @@ class OrderRepository {
         $order->save();
         return $order;
     }
-    public function getOrderAddress(int $userId): ?string
+    public function getOrderAddress(int $orderId): ?string
     {
-        $order = Order::where('user_id', $userId)->first();
+        $order = Order::find($orderId);
         return $order?->address;
     }
-
+    public function changeStatus(int $userId, string $status){
+        $status = Order::where('user_id', $userId)->first();
+        $status->status = $status;
+        $status->save();
+        return $status;
+    }
+    public function getStatus(int $orderId)
+    {
+        $status = Order::find($orderId);
+        return $status->status;
+    }
+    public function myOrders(int $userID){
+        $orders = Order::where('user_id', $userID)->get();
+        return $orders;
+    }
+    public function deliever(int $order_id)
+    {
+        $deliver = Order::where('id', $order_id)->first();
+        $address = $deliver->address;
+        $deliver->status = "on the way";
+        $deliver->save();
+    }
 }

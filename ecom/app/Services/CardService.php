@@ -67,16 +67,11 @@ class CardService {
     public function pay(float $price, int $cardID, int $userId)
     {
         $getBalance = $this->cardRepository->getBalance($cardID);
-        $getAddress = $this->orderRepository->getOrderAddress($userId);
-        if (empty($getAddress)) {
-            return [
-                "successs" => false,
-                "message" => "Address not found, please set Address"
-            ];
-        }
+
         if ($getBalance < $price) {
             throw new \Exception('not enought money)');
         }
+        $status  = $this->orderRepository->changeStatus($userId,"payed");
         return $this->cardRepository->payOrder($price,$cardID);
     }
 

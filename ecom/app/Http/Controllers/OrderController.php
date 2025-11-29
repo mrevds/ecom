@@ -12,7 +12,6 @@ class OrderController {
     ){}
     public function makeOrder(Request $request)
     {
-
         $order = $this->orderService->makeOrder($request->user()->id);
         return response()->json($order);
     }
@@ -24,5 +23,17 @@ class OrderController {
         ];
 
         return response()->json($this->orderService->setAddress($data));
+    }
+
+    public function getOrders(Request $request)
+    {
+        $user_id = $request->user()->id;
+        return response()->json($this->orderService->getMyOrders($user_id));
+    }
+    public function deliverOrder(Request $request)
+    {
+        $user_id = $request->user()->id;
+        $order_id = $request->route('id');
+        return response()->json($this->orderService->deliver($order_id,$user_id));
     }
 }

@@ -21,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/make-order', [OrderController::class, 'makeOrder']);
     Route::post('/pay-order', [CardController::class, 'pay']);
     Route::post('/set-address', [OrderController::class,'setAddress']);
+    Route::get('/get-orders', [OrderController::class, 'getOrders']);
+    Route::post('/deliver-order/{id}', [OrderController::class, 'deliverOrder']);
 });
 
 

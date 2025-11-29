@@ -38,5 +38,24 @@ class OrderService
         }
         $this->orderRepository->setAddress($data);
     }
+    public function getMyOrders(int $userID)
+    {
+        return $this->orderRepository->myOrders($userID);
+    }
+    public function deliver(int $order_id)
+    {
+        $address = $this->orderRepository->getOrderAddress($order_id);
+        $status = $this->orderRepository->getStatus($order_id);
+        if ($address == "empty") {
+            return "please set location to deliving";
+        }
+        if ($status !== "payed") {
+            return "please pay order before";
+        }
+        return $this->orderRepository->deliever($order_id);
+    }
+
+
+
 
 }
