@@ -26,7 +26,8 @@ class CardController extends Controller
     {
         $price = $request->input('price');
         $cardID = $request->input('cardID');
-        $pay = $this->cardService->pay($price,$cardID,$request->user()->id);
+        $orderId = $request->route('id');
+        $pay = $this->cardService->pay($price,$cardID,$request->user()->id, $orderId);
         return response()->json($pay);
     }
 

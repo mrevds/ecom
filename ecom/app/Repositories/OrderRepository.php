@@ -28,7 +28,6 @@ class OrderRepository {
     }
     public function setAddress(array $data)
     {
-
         $user = $data['user_id'];
         $order = Order::where('user_id', $user)->first();
         if (!$order) {
@@ -43,11 +42,11 @@ class OrderRepository {
         $order = Order::find($orderId);
         return $order?->address;
     }
-    public function changeStatus(int $userId, string $status){
-        $status = Order::where('user_id', $userId)->first();
-        $status->status = $status;
-        $status->save();
-        return $status;
+    public function changeStatus(int $orderId, string $status){
+        $order  = Order::where('id', $orderId)->first();
+        $order ->status = $status;
+        $order->save();
+        return $order;
     }
     public function getStatus(int $orderId)
     {
@@ -64,5 +63,16 @@ class OrderRepository {
         $address = $deliver->address;
         $deliver->status = "on the way";
         $deliver->save();
+    }
+    public function getCountOrder(int $order_id)
+    {
+        $order = Orderitems::where('order_id', $order_id)->get();
+        $items = [];
+        foreach ($order as $item) {
+            $items[] = [
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity
+            ];}
+        return $items;
     }
 }

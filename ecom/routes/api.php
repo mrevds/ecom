@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/get-basket-list',[BasketController::class, 'getBasketList']);
     Route::delete('/delete-item-from-basket/{id}', [BasketController::class, 'removeFromList']);
     Route::post('/make-order', [OrderController::class, 'makeOrder']);
-    Route::post('/pay-order', [CardController::class, 'pay']);
+    Route::post('/pay-order/{id}', [CardController::class, 'pay']);
     Route::post('/set-address', [OrderController::class,'setAddress']);
     Route::get('/get-orders', [OrderController::class, 'getOrders']);
     Route::post('/deliver-order/{id}', [OrderController::class, 'deliverOrder']);

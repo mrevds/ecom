@@ -51,9 +51,15 @@ class ProductRepository {
         $productPrice = $this->findById($productId);
         return $productPrice ? $productPrice->price : 0;
     }
-    public function getProductStock($productId)
+//    public function getProductStock($productId)
+//    {
+//        $product = $this->findById($productId);
+//        return $product ? $product->stock : 0;
+//    }
+    public function decreaseProductStock()
     {
-        $product = $this->findById($productId);
-        return $product ? $product->stock : 0;
+        $products = Products::all();
+
+        return $products;
     }
 }

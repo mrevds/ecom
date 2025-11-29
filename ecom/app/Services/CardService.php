@@ -5,11 +5,13 @@ namespace App\Services;
 use App\Models\Card;
 use App\Repositories\CardRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\ProductRepository;
 
 class CardService {
     public function __construct(
         private CardRepository $cardRepository,
-        private OrderRepository $orderRepository
+        private OrderRepository $orderRepository,
+        private ProductRepository $productRepository
     ){}
     private function validateExpiry(string $date): bool
     {
@@ -64,14 +66,45 @@ class CardService {
     public function deleteCard(int $cardId){
         return $this->cardRepository->deleteCard($cardId);
     }
-    public function pay(float $price, int $cardID, int $userId)
+    public function pay(float $price, int $cardID, int $userId, int $orderID)
     {
         $getBalance = $this->cardRepository->getBalance($cardID);
+        $getQuanitityOrder = $this->orderRepository->getCountOrder($orderID);
+        $getStockStore = $this->productRepository->decreaseProductStock();
+
+        foreach ($getQuanitityOrder as $to_buy) {
+            $stockItem = null;
+            foreach ($getStockStore as $stock) {
+                if ($stock->id == $to_buy['product_id']) {
+                    $stockItem = $stock;
+                    break;
+                }
+            }
+            if (!$stockItem) {
+                throw new \Exception("product not found");
+            }
+            if ($stockItem->stock < $to_buy['quantity']) {
+                throw new \Exception("not enouth stock for product ".$to_buy['product_id']);
+            }
+        }
+
+        foreach ($getQuanitityOrder as $tobuy){
+            $stockitem = null;
+            foreach ($getStockStore as $stock) {
+                if ($stock->id == $tobuy['product_id']) {
+                    $stockitem = $stock;
+                    break;
+                }
+            }
+            $newStock = $stockitem->stock -= $tobuy['quantity'];
+            $this->productRepository->update($stockitem->id, ['stock' => $newStock]);
+        }
 
         if ($getBalance < $price) {
             throw new \Exception('not enought money)');
         }
-        $status  = $this->orderRepository->changeStatus($userId,"payed");
+
+        $status  = $this->orderRepository->changeStatus($orderID,"payed");
         return $this->cardRepository->payOrder($price,$cardID);
     }
 
